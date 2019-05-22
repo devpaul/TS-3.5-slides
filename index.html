@@ -75,7 +75,7 @@
 		</section>
 
 		<section>
-			<h2>Speed Improvements</h2>
+			<h3>Speed Improvements</h3>
 
 			<ul>
 				<li class="fragment">Fixed a regression from TS 3.4</li>
@@ -89,7 +89,7 @@
 		</section>
 
 		<section>
-			<h2>Omit Helper</h2>
+			<h3>Omit Helper</h3>
 
 			<pre><code data-trim data-noescape>
 				interface CredentialedUser {
@@ -166,7 +166,7 @@
 		</section>
 
 		<section>
-			<h2>Higher order type inference from generic constructors</h2>
+			<h3>Higher order type inference from generic constructors</h3>
 
 			<p class="fragment">When composing higher-order generic functions TS 3.5 will maintain the generic <i>T</i> instead of using the <i>{}</i> type</p>
 
@@ -202,7 +202,7 @@
 				dict = () => {};
 			</code></pre>
 
-			<p class="fragment">This change was made due to the implicit <i>unknown</i>> in generics</p>
+			<p class="fragment">This change was made due to the implicit <i>unknown</i> in generics</p>
 		</section>
 
 		<section>
@@ -231,23 +231,6 @@
 			</code></pre>
 
 			<p>Throws when targeting ES5. Returns <i>[]</i> in ES6.</p>
-		</section>
-
-		<section>
-			<!--
-				* Speed improvements
-				* --incremental improvements
-				* Omit helper (breaking)
-				* Improved excess property check in union types (breaking)
-				* --allowUmdGlobalAccess
-				* Smarter union type checking
-				* Higher order type inference from generic constructors
-				* Breaking changes
-					* generic type parameters are implicitly constrained to unknown
-					* { [k: string]: unknown } is no longer a wildcard assignment target
-					* Fixes to unsound writes of indexed access types
-					* Object.keys rejects primitives in ES5
-			-->
 		</section>
 	</div>
 </div>
