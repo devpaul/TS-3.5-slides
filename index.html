@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>TypeScript 3.5</title>
+
+	<meta name="description" content="All about TS 3.5">
+	<meta name="author" content="Paul Shannon">
+
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+	<link rel="stylesheet" href="node_modules/reveal.js/css/reveal.css">
+	<link rel="stylesheet" href="node_modules/reveal.js/css/theme/sky.css" id="theme">
+
+	<!-- Code syntax highlighting -->
+	<link rel="stylesheet" href="node_modules/reveal.js/lib/css/zenburn.css">
+	<link rel="stylesheet" href="resources/main.css">
+
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'node_modules/reveal.js/css/print/pdf.css' : 'node_modules/reveal.js/css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+
+<body>
+
+<div class="reveal">
+	<!-- Any section element inside of this container is displayed as a slide -->
+	<div class="slides">
+		<!-- TODO title -->
+		<section>
+			<h2>TypeScript 3.5</h2>
+		</section>
+
+		<section>
+			<h2>Hello!</h2>
+
+			<div class="two-column">
+				<div>
+					<h3>Paul Shannon</h3>
+					<img src="assets/images/sitepen.png" class="removeFormatting">
+				</div>
+				<div>
+					<ul>
+						<li>Sr Engineer @ SitePen</li>
+						<li>Talkscript Podcast: <a href="https://talkscript.fm">talkscript.fm</a></li>
+						<li>Phoenix TypeScript</li>
+						<li>Committer: Dojo, Intern</li>
+						<li class="github no-style"><a href="https://github.com/devpaul">devpaul</a></li>
+						<li class="twitter no-style"><a href="https://twitter.com/developerPaul">@developerPaul</a></li>
+					</ul>
+				</div>
+			</div>
+			<aside class="notes">
+				TODO add images to intern, podcast, phxts, github, twitter
+			</aside>
+		</section>
+
+		<section>
+			<h3>TypeScript 3.5 RC</h3>
+			<p>Expected to ship end of May</p>
+			<pre><code>npm install typescript@rc</code></pre>
+		</section>
+
+		<section>
+			<h2>Speed Improvements</h2>
+
+			<ul>
+				<li class="fragment">Fixed a regression from TS 3.4</li>
+				<li class="fragment">3.5 is faster in many cases than 3.3</li>
+				<li class="fragment">--incremental improvements</li>
+			</ul>
+
+			<aside class="notes">
+				--incremental 68% faster
+			</aside>
+		</section>
+
+		<section>
+			<h2>Omit Helper</h2>
+
+			<pre><code data-trim data-noescape>
+				interface CredentialedUser {
+					id: string;
+					age: number;
+					name: string;
+					password: string;
+				}
+
+				type User = Omit(CredentialedUser, 'password');
+
+				type UserInfo = Omit(CredentialedUser, 'password' | 'id');
+			</code></pre>
+
+			<aside class="notes">
+				<ul>
+					<li>BREAKING CHANGE</li>
+					<li>Omit wasn't added originally because it is trivially created from Pick&lt;T, Exclude&lt;T, K keyof T>></li>
+				</ul>
+			</aside>
+		</section>
+
+		<section>
+			<h2>Improved Union Type Checking</h2>
+		</section>
+
+		<section>
+			<h3>excess union member checks</h3>
+
+			<pre><code data-trim data-noescape>
+				interface Point {
+					x: number;
+					y: number;
+				}
+
+				interface Label {
+					name: string;
+				}
+
+				const value: Point | Label = {
+					x: 0,
+					y: 0,
+					name: true
+				}
+			</code></pre>
+
+			<p>TS 3.5 checks all excess members for valid typing</p>
+
+			<aside class="notes">
+				<ul>
+					<li>Previously TS checked that code fit into at least one member of a union</li>
+					<li>BREAKING CHANGE</li>
+					<li>Breaking code is probably a good thing</li>
+				</ul>
+			</aside>
+		</section>
+
+		<section>
+			<h3>smarter union type checking</h3>
+
+			<pre><code data-noescape data-trim>
+				type S = { done: boolean, value: number }
+				type T =
+					{ done: false, value: number }
+					| { done: true, value: number };
+
+				declare let source: S;
+				declare let target: T;
+
+				target = source;
+			</code></pre>
+
+			<p>TS 3.5 will combine constituent types to match unions when appropriate</p>
+		</section>
+
+		<section>
+			<h2>Higher order type inference from generic constructors</h2>
+
+			<p class="fragment">When composing higher-order generic functions TS 3.5 will maintain the generic <i>T</i> instead of using the <i>{}</i> type</p>
+
+			<aside class="notes">
+				<ul>
+					<li>Example</li>
+				</ul>
+			</aside>
+		</section>
+
+		<section>
+			<h1>Breaking <s>Changes</s> Improvements</h1>
+		</section>
+
+		<section>
+			<h3>generic type parameters are implicitly constrained to unknown</h3>
+
+			<pre><code data-trim data-noescape>
+				function foo&lt;T>(x: T): [T, string] {
+						return [x, x.toString()]
+						// error! Property 'toString' does not exist on type 'T'.
+					}
+			</code></pre>
+
+			<p class="fragment">If <i>{}</i> is the desired default then use <i>T extend {}</i></p>
+		</section>
+
+		<section>
+			<h3><i>{ [k: string]: unknown }</i> is no longer a wildcard assignment target</h3>
+			<pre><code data-trim data-noescape>
+				let dict: { [s: string]: unknown };
+
+				dict = () => {};
+			</code></pre>
+
+			<p class="fragment">This change was made due to the implicit <i>unknown</i>> in generics</p>
+		</section>
+
+		<section>
+			<h3>Fixes to unsound writes to indexed access types</h3>
+
+			<pre><code data-trim data-noescape>
+				type A = {
+					s: string;
+					n: number;
+				};
+
+				function write&lt;K extends keyof A>(arg: A, key: K, value: A[K]): void {
+					arg[key] = "hello, world";
+				}
+
+				// Breaks the object by putting a string where a number should be
+				write(a, "n", "oops!");
+			</code></pre>
+		</section>
+
+		<section>
+			<h3><i>Object.keys</i> rejects primitives in ES5</h3>
+
+			<pre><code data-trim data-noescape>
+				Object.keys(10);
+			</code></pre>
+
+			<p>Throws when targeting ES5. Returns <i>[]</i> in ES6.</p>
+		</section>
+
+		<section>
+			<!--
+				* Speed improvements
+				* --incremental improvements
+				* Omit helper (breaking)
+				* Improved excess property check in union types (breaking)
+				* --allowUmdGlobalAccess
+				* Smarter union type checking
+				* Higher order type inference from generic constructors
+				* Breaking changes
+					* generic type parameters are implicitly constrained to unknown
+					* { [k: string]: unknown } is no longer a wildcard assignment target
+					* Fixes to unsound writes of indexed access types
+					* Object.keys rejects primitives in ES5
+			-->
+		</section>
+	</div>
+</div>
+
+<script src="node_modules/reveal.js/lib/js/head.min.js"></script>
+<script src="node_modules/reveal.js/js/reveal.js"></script>
+<script src="src/index.js"></script>
+
+</body>
+</html>
